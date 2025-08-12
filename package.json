@@ -1,0 +1,33 @@
+{
+  "name": "graphql-introspection-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for GraphQL introspection with filtering capabilities",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "mcp",
+    "graphql",
+    "introspection",
+    "server"
+  ],
+  "author": "kokorolx",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.2",
+    "graphql": "^16.8.1",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/node-fetch": "^2.6.13",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
