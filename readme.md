@@ -20,20 +20,103 @@ npm run build
 
 ## Usage
 
-### As MCP Server
+### Using npx
 
-Configure in your MCP client configuration:
+You can run the tool directly via npx:
+
+```bash
+npx graphql-inspector-mcp
+```
+
+This will start the MCP server and expose GraphQL introspection tools.
+
+---
+
+## CLI Arguments
+
+The following arguments can be provided via JSON config, environment variables, or MCP tool requests. They are not traditional CLI flags, but are passed as options to the server or tools.
+
+| Argument         | Type      | Description                                                                 | Example Value                      |
+|------------------|-----------|-----------------------------------------------------------------------------|------------------------------------|
+| `endpoint`       | string    |GraphQL endpoint URL (default: `http://localhost:5555/graphql`)             | `http://localhost:5555/graphql`    |
+| `username`       | string    | Username for basic authentication (optional)                                | `admin`                            |
+| `password`       | string    | Password for basic authentication (optional)                                | `secret`                           |
+| `bearer_token`   | string    | Bearer token for authentication (optional)                                  | `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...` |
+| `search`         | string    | Search pattern to filter queries, mutations, or types (case-insensitive)    | `user`                             |
+| `detailed`       | boolean   | Return detailed information (default: `false`)                              | `true`                             |
+| `kind`           | string    | Filter by type kind (`OBJECT`, `SCALAR`, `ENUM`, `INTERFACE`, `UNION`, `INPUT_OBJECT`) | `OBJECT`                   |
+| `type_name`      | string    | Name of the type to get details for                                         | `User`                             |
+| `field_name`     | string    | Name of the field to get details for                                        | `getUser`                          |
+| `operation_type` | string    | Type of operation (`query` or `mutation`)                                   | `query`                            |
+
+### Usage Example
+
+```bash
+npx graphql-inspector-mcp
+```
+
+With config file (`mcp.config.json`):
 
 ```json
 {
   "mcpServers": {
     "graphql-introspection": {
-      "command": "node",
-      "args": ["path/to/dist/index.js"]
+      "command": "npx",
+      "args": [
+        "-y",
+        "kokorolx/graphql-inspector-mcp"
+      ],
+      "options": {
+        "endpoint": "http://localhost:5555/graphql"
+      }
     }
   }
 }
 ```
+
+Or via environment variables:
+
+```bash
+export GRAPHQL_DEFAULT_ENDPOINT="http://localhost:4000/graphql"
+export CACHE_DURATION_MS="600000"
+```
+
+Or via MCP tool request JSON:
+
+```json
+{
+  "endpoint": "http://localhost:5555/graphql",
+  "search": "user",
+  "detailed": true
+}
+```
+
+### MCP Config File
+
+The MCP config file allows you to customize server settings and tool behavior. By default, the config file should be named `mcp.config.json` and placed in your project root.
+
+**Example `mcp.config.json`:**
+
+```json
+{
+  "mcpServers": {
+    "graphql-introspection": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "kokorolx/graphql-inspector-mcp"
+      ],
+      "options": {
+        "endpoint": "http://localhost:5550/graphql"
+      }
+    }
+  }
+}
+```
+
+- **Location:** Project root (e.g., `./mcp.config.json`)
+- **Format:** Standard JSON
+- **Usage:** The MCP client will automatically detect and use this configuration when starting the server.
 
 ### Available Tools
 

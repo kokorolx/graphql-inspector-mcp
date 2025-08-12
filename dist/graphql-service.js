@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GraphQLIntrospectionService = void 0;
 const fetch = require('node-fetch');
 const { getIntrospectionQuery, buildClientSchema, printSchema } = require('graphql');
-console.error('[DEBUG] Entry: src/graphql-service.ts loaded');
 class GraphQLIntrospectionService {
     constructor() {
         this.cache = new Map();
@@ -18,11 +17,10 @@ class GraphQLIntrospectionService {
         return Date.now() - entry.timestamp < this.CACHE_DURATION;
     }
     async fetchIntrospection(endpoint, auth) {
-        console.error('[DEBUG] fetchIntrospection called', { endpoint, auth });
+        console.info('🚀🚀🚀 ====== endpoint:', endpoint);
         const cacheKey = this.getCacheKey(endpoint, auth);
         const cached = this.cache.get(cacheKey);
         if (cached && this.isValidCache(cached)) {
-            console.error('[DEBUG] Returning cached introspection data');
             return cached.data;
         }
         const headers = {
@@ -45,12 +43,10 @@ class GraphQLIntrospectionService {
                 }),
             });
             if (!response.ok) {
-                console.error('[DEBUG] fetchIntrospection HTTP error', response.status, response.statusText);
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
             const result = await response.json();
             if (result.errors) {
-                console.error('[DEBUG] fetchIntrospection GraphQL errors', result.errors);
                 throw new Error(`GraphQL errors: ${JSON.stringify(result.errors)}`);
             }
             // Cache the result
@@ -58,11 +54,9 @@ class GraphQLIntrospectionService {
                 data: result.data,
                 timestamp: Date.now(),
             });
-            console.error('[DEBUG] fetchIntrospection success');
             return result.data;
         }
         catch (error) {
-            console.error('[DEBUG] fetchIntrospection exception', error);
             if (error instanceof Error) {
                 throw new Error(`Failed to fetch GraphQL schema: ${error.message}`);
             }
@@ -70,7 +64,7 @@ class GraphQLIntrospectionService {
         }
     }
     async getSchema(options = {}) {
-        const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+        const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
         const introspectionData = await this.fetchIntrospection(endpoint, options);
         try {
             const schema = buildClientSchema(introspectionData);
@@ -93,7 +87,7 @@ class GraphQLIntrospectionService {
         }
     }
     async filterQueries(options = {}) {
-        const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+        const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
         const introspectionData = await this.fetchIntrospection(endpoint, options);
         const queryType = introspectionData.__schema.queryType;
         if (!queryType) {
@@ -145,7 +139,7 @@ class GraphQLIntrospectionService {
         };
     }
     async filterMutations(options = {}) {
-        const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+        const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
         const introspectionData = await this.fetchIntrospection(endpoint, options);
         const mutationType = introspectionData.__schema.mutationType;
         if (!mutationType) {
@@ -197,7 +191,7 @@ class GraphQLIntrospectionService {
         };
     }
     async filterTypes(options = {}) {
-        const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+        const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
         const introspectionData = await this.fetchIntrospection(endpoint, options);
         let types = introspectionData.__schema.types.filter((type) => !type.name.startsWith('__') // Filter out introspection types
         );
@@ -239,7 +233,7 @@ class GraphQLIntrospectionService {
         };
     }
     async getTypeDetails(options) {
-        const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+        const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
         const introspectionData = await this.fetchIntrospection(endpoint, options);
         const type = introspectionData.__schema.types.find((t) => t.name === options.type_name);
         if (!type) {
@@ -268,7 +262,7 @@ class GraphQLIntrospectionService {
         };
     }
     async getFieldDetails(options) {
-        const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+        const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
         const introspectionData = await this.fetchIntrospection(endpoint, options);
         const operationType = options.operation_type || 'query';
         const rootType = operationType === 'mutation'

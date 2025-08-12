@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-console.error('[DEBUG] Entry: src/index.ts loaded');
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
 const {
@@ -9,10 +8,6 @@ const {
   CallToolRequest,
 } = require('@modelcontextprotocol/sdk/types.js');
 const { GraphQLIntrospectionService } = require('./graphql-service.js');
-
-// Retrieve base URL from environment variables
-const BASE_URL = process.env.BASE_URL || 'http://localhost:5555/graphql';
-console.error(`[DEBUG] BASE_URL set to: ${BASE_URL}`);
 
 // Initialize the GraphQL service
 const graphqlService = new GraphQLIntrospectionService();
@@ -303,10 +298,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request: any) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error('[DEBUG] MCP server connected and running on stdio');
 }
 
 main().catch((error) => {
-  console.error('[DEBUG] Server error:', error);
   process.exit(1);
 });

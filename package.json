@@ -1,6 +1,6 @@
 {
   "name": "graphql-inspector-mcp",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "MCP server for GraphQL introspection with filtering capabilities",
   "main": "dist/index.js",
   "bin": {
@@ -20,6 +20,7 @@
   ],
   "author": "kokorolx",
   "license": "MIT",
+  "homepage": "https://github.com/kokorolx/graphql-inspector-mcp",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.2",
     "graphql": "^16.8.1",

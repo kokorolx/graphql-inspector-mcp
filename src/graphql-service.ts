@@ -34,7 +34,6 @@ interface CacheEntry {
   timestamp: number;
 }
 
-console.error('[DEBUG] Entry: src/graphql-service.ts loaded');
 export class GraphQLIntrospectionService {
   private cache = new Map<string, CacheEntry>();
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
@@ -51,12 +50,11 @@ export class GraphQLIntrospectionService {
   }
 
   private async fetchIntrospection(endpoint: string, auth: AuthOptions): Promise<any> {
-    console.error('[DEBUG] fetchIntrospection called', { endpoint, auth });
+    console.info('🚀🚀🚀 ====== endpoint:', endpoint)
     const cacheKey = this.getCacheKey(endpoint, auth);
     const cached = this.cache.get(cacheKey);
 
     if (cached && this.isValidCache(cached)) {
-      console.error('[DEBUG] Returning cached introspection data');
       return cached.data;
     }
 
@@ -82,14 +80,12 @@ export class GraphQLIntrospectionService {
       });
 
       if (!response.ok) {
-        console.error('[DEBUG] fetchIntrospection HTTP error', response.status, response.statusText);
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
       const result = await response.json() as any;
 
       if (result.errors) {
-        console.error('[DEBUG] fetchIntrospection GraphQL errors', result.errors);
         throw new Error(`GraphQL errors: ${JSON.stringify(result.errors)}`);
       }
 
@@ -99,10 +95,8 @@ export class GraphQLIntrospectionService {
         timestamp: Date.now(),
       });
 
-      console.error('[DEBUG] fetchIntrospection success');
       return result.data;
     } catch (error) {
-      console.error('[DEBUG] fetchIntrospection exception', error);
       if (error instanceof Error) {
         throw new Error(`Failed to fetch GraphQL schema: ${error.message}`);
       }
@@ -111,7 +105,7 @@ export class GraphQLIntrospectionService {
   }
 
   async getSchema(options: BaseOptions = {}): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     try {
@@ -136,7 +130,7 @@ export class GraphQLIntrospectionService {
   }
 
   async filterQueries(options: FilterOptions = {}): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     const queryType = introspectionData.__schema.queryType;
@@ -202,7 +196,7 @@ export class GraphQLIntrospectionService {
   }
 
   async filterMutations(options: FilterOptions = {}): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     const mutationType = introspectionData.__schema.mutationType;
@@ -268,7 +262,7 @@ export class GraphQLIntrospectionService {
   }
 
   async filterTypes(options: TypeFilterOptions = {}): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     let types = introspectionData.__schema.types.filter(
@@ -321,7 +315,7 @@ export class GraphQLIntrospectionService {
   }
 
   async getTypeDetails(options: TypeDetailsOptions): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     const type = introspectionData.__schema.types.find(
@@ -356,7 +350,7 @@ export class GraphQLIntrospectionService {
   }
 
   async getFieldDetails(options: FieldDetailsOptions): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint ?? this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     const operationType = options.operation_type || 'query';
