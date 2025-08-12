@@ -111,7 +111,7 @@ export class GraphQLIntrospectionService {
   }
 
   async getSchema(options: BaseOptions = {}): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint !== undefined ? options.endpoint : this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     try {
@@ -136,7 +136,7 @@ export class GraphQLIntrospectionService {
   }
 
   async filterQueries(options: FilterOptions = {}): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint !== undefined ? options.endpoint : this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     const queryType = introspectionData.__schema.queryType;
@@ -202,7 +202,7 @@ export class GraphQLIntrospectionService {
   }
 
   async filterMutations(options: FilterOptions = {}): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint !== undefined ? options.endpoint : this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     const mutationType = introspectionData.__schema.mutationType;
@@ -268,7 +268,7 @@ export class GraphQLIntrospectionService {
   }
 
   async filterTypes(options: TypeFilterOptions = {}): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint !== undefined ? options.endpoint : this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     let types = introspectionData.__schema.types.filter(
@@ -321,7 +321,7 @@ export class GraphQLIntrospectionService {
   }
 
   async getTypeDetails(options: TypeDetailsOptions): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint !== undefined ? options.endpoint : this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     const type = introspectionData.__schema.types.find(
@@ -356,7 +356,7 @@ export class GraphQLIntrospectionService {
   }
 
   async getFieldDetails(options: FieldDetailsOptions): Promise<any> {
-    const endpoint = options.endpoint || this.DEFAULT_ENDPOINT;
+    const endpoint = options.endpoint !== undefined ? options.endpoint : this.DEFAULT_ENDPOINT;
     const introspectionData = await this.fetchIntrospection(endpoint, options);
 
     const operationType = options.operation_type || 'query';
