@@ -10,6 +10,10 @@ const {
 } = require('@modelcontextprotocol/sdk/types.js');
 const { GraphQLIntrospectionService } = require('./graphql-service.js');
 
+// Retrieve base URL from environment variables
+const BASE_URL = process.env.BASE_URL || 'http://localhost:5555/graphql';
+console.error(`[DEBUG] BASE_URL set to: ${BASE_URL}`);
+
 // Initialize the GraphQL service
 const graphqlService = new GraphQLIntrospectionService();
 

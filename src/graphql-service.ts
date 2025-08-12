@@ -38,7 +38,8 @@ console.error('[DEBUG] Entry: src/graphql-service.ts loaded');
 export class GraphQLIntrospectionService {
   private cache = new Map<string, CacheEntry>();
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-  private readonly DEFAULT_ENDPOINT = 'http://localhost:5555/graphql';
+  private readonly DEFAULT_ENDPOINT =
+    process.env.BASE_URL || 'http://localhost:5555/graphql';
 
   private getCacheKey(endpoint: string, auth: AuthOptions): string {
     const authKey = auth.username || auth.bearer_token || 'no-auth';

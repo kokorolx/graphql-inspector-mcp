@@ -1,8 +1,11 @@
 {
-  "name": "graphql-introspection-mcp-server",
+  "name": "graphql-inspector-mcp",
   "version": "1.0.0",
   "description": "MCP server for GraphQL introspection with filtering capabilities",
   "main": "dist/index.js",
+  "bin": {
+    "graphql-inspector-mcp": "dist/index.js"
+  },
   "scripts": {
     "build": "npm run clean && tsc",
     "start": "node dist/index.js",
